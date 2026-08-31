@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Set up your Runambiz business workspace."
+  >
+
+  <meta
+    name="robots"
+    content="noindex, nofollow"
+  >
+
+  <title>Set up your business — Runambiz</title>
+
+
+  <!-- =========================
+       GOOGLE FONTS
+  ========================== -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- =========================
+       YOUR CSS
+  ========================== -->
+
+<link rel="stylesheet" href="onboarding.css">
+
+</head>
+
+
+<body>
+
+
+  <!-- =========================
+       BACKGROUND DECORATION
+  ========================== -->
+
+  <div
+    class="onboarding-bg"
+    aria-hidden="true"
+  >
+    <div class="onboarding-orb onboarding-orb-one"></div>
+    <div class="onboarding-orb onboarding-orb-two"></div>
+    <div class="onboarding-grid"></div>
+  </div>
+
+
+
+  <!-- =========================
+       PAGE
+  ========================== -->
+
+  <main class="onboarding-shell">
+
+
+    <section
+      class="onboarding-card"
+      aria-labelledby="onboardingTitle"
+    >
+
+
+      <!-- =========================
+           TOP BAR
+      ========================== -->
+
+      <div class="onboarding-topbar">
+
+
+        <a
+          href="index.html"
+          class="onboarding-brand"
+          aria-label="Runambiz home"
+        >
+
+          <span class="brand-mark">
+            R
+          </span>
+
+          <span class="brand-name">
+            Runambiz<span>.</span>
+          </span>
+
+        </a>
+
+
+        <button
+          type="button"
+          class="change-account-btn"
+          id="changeAccountBtn"
+        >
+
+          <i data-lucide="log-out"></i>
+
+          <span>
+            Change account
+          </span>
+
+        </button>
+
+
+      </div>
+
+
+
+      <!-- =========================
+           HEADING
+      ========================== -->
+
+      <div class="onboarding-intro">
+
+        <div class="onboarding-badge">
+
+          <span class="badge-dot"></span>
+
+          Business setup
+
+        </div>
+
+
+        <h1 id="onboardingTitle">
+          Let's get your business ready.
+        </h1>
+
+
+        <p>
+          Tell Runambiz a little about you and your business.
+          You can change these details later from your dashboard.
+        </p>
+
+      </div>
+
+
+
+      <!-- =========================
+           SIGNED IN ACCOUNT
+      ========================== -->
+
+      <div
+        class="account-banner"
+        id="accountBanner"
+      >
+
+        <div class="account-banner-icon">
+          <i data-lucide="circle-check-big"></i>
+        </div>
+
+
+        <div class="account-banner-copy">
+
+          <span>
+            Signed in as
+          </span>
+
+          <strong id="accountEmail">
+            Loading account...
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =========================
+           PROGRESS
+      ========================== -->
+
+      <div
+        class="onboarding-progress"
+        aria-label="Setup progress"
+      >
+
+        <div
+          class="progress-segment is-active"
+          data-segment="1"
+        ></div>
+
+        <div
+          class="progress-segment"
+          data-segment="2"
+        ></div>
+
+        <div
+          class="progress-segment"
+          data-segment="3"
+        ></div>
+
+      </div>
+
+
+
+      <!-- =====================================================
+           STEP 1
+           PERSONAL DETAILS
+      ====================================================== -->
+
+      <section
+        class="onboarding-step"
+        data-step="1"
+      >
+
+
+        <div class="step-header">
+
+          <div class="step-number">
+            01
+          </div>
+
+
+          <div>
+
+            <span class="step-eyebrow">
+              Step 1 of 3
+            </span>
+
+            <h2>
+              Tell us about you
+            </h2>
+
+            <p class="step-sub">
+              These details help personalize your Runambiz account.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- FULL NAME -->
+
+        <div class="form-group">
+
+          <label for="fullName">
+            Full name
+          </label>
+
+
+          <div class="input-wrap">
+
+            <i
+              data-lucide="user"
+              class="input-icon"
+            ></i>
+
+
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              placeholder="Your full name"
+              autocomplete="name"
+              maxlength="80"
+              required
+            >
+
+          </div>
+
+
+          <small class="field-error"></small>
+
+        </div>
+
+
+
+        <!-- EMAIL -->
+
+        <div class="form-group">
+
+          <div class="label-row">
+
+            <label for="email">
+              Email address
+            </label>
+
+            <span class="verified-label">
+              <i data-lucide="badge-check"></i>
+              Verified
+            </span>
+
+          </div>
+
+
+          <div class="input-wrap is-readonly">
+
+            <i
+              data-lucide="mail"
+              class="input-icon"
+            ></i>
+
+
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Loading email..."
+              autocomplete="email"
+              readonly
+            >
+
+          </div>
+
+
+          <small class="field-help">
+            Your account email can't be changed during setup.
+          </small>
+
+        </div>
+
+
+
+        <!-- PHONE -->
+
+        <div class="form-group">
+
+          <label for="phone">
+            Phone number
+          </label>
+
+
+          <div class="input-wrap">
+
+            <i
+              data-lucide="phone"
+              class="input-icon"
+            ></i>
+
+
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="e.g. 08012345678"
+              autocomplete="tel"
+              inputmode="tel"
+              maxlength="20"
+              required
+            >
+
+          </div>
+
+
+          <small class="field-error"></small>
+
+        </div>
+
+
+
+        <!-- WHATSAPP -->
+
+        <div class="form-group">
+
+          <div class="label-row">
+
+            <label for="whatsapp">
+              WhatsApp business number
+            </label>
+
+            <span class="optional-label">
+              Optional
+            </span>
+
+          </div>
+
+
+          <div class="input-wrap">
+
+            <i
+              data-lucide="message-circle"
+              class="input-icon"
+            ></i>
+
+
+            <input
+              type="tel"
+              id="whatsapp"
+              name="whatsapp"
+              placeholder="e.g. 08012345678"
+              inputmode="tel"
+              maxlength="20"
+            >
+
+          </div>
+
+
+          <small class="field-help">
+            You can connect WhatsApp properly from your dashboard later.
+          </small>
+
+        </div>
+
+
+      </section>
+
+
+
+      <!-- =====================================================
+           STEP 2
+           BUSINESS DETAILS
+      ====================================================== -->
+
+      <section
+        class="onboarding-step"
+        data-step="2"
+        hidden
+      >
+
+
+        <div class="step-header">
+
+          <div class="step-number">
+            02
+          </div>
+
+
+          <div>
+
+            <span class="step-eyebrow">
+              Step 2 of 3
+            </span>
+
+            <h2>
+              Set up your business
+            </h2>
+
+            <p class="step-sub">
+              This creates the foundation for your Runambiz store.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- STORE NAME -->
+
+        <div class="form-group">
+
+          <label for="storeName">
+            Business / store name
+          </label>
+
+
+          <div class="input-wrap">
+
+            <i
+              data-lucide="store"
+              class="input-icon"
+            ></i>
+
+
+            <input
+              type="text"
+              id="storeName"
+              name="storeName"
+              placeholder="e.g. Ada's Fabrics"
+              maxlength="100"
+              required
+            >
+
+          </div>
+
+
+          <div
+            class="slug-preview"
+            id="slugPreview"
+            hidden
+          >
+
+            <i data-lucide="link"></i>
+
+            <span>
+              Your store:
+            </span>
+
+            <strong id="slugPreviewText"></strong>
+
+          </div>
+
+
+          <small class="field-error"></small>
+
+        </div>
+
+
+
+        <!-- BUSINESS TYPE -->
+
+        <div class="form-group">
+
+          <label for="businessType">
+            What best describes your business?
+          </label>
+
+
+          <div class="select-wrap">
+
+            <i
+              data-lucide="briefcase-business"
+              class="input-icon"
+            ></i>
+
+
+            <select
+              id="businessType"
+              name="businessType"
+              required
+            >
+
+              <option
+                value=""
+                disabled
+                selected
+              >
+                Choose your business type
+              </option>
+
+              <option value="fashion">
+                Fashion &amp; fabric
+              </option>
+
+              <option value="food">
+                Food &amp; catering
+              </option>
+
+              <option value="beauty">
+                Beauty &amp; cosmetics
+              </option>
+
+              <option value="salon">
+                Salon / barber
+              </option>
+
+              <option value="gadgets">
+                Gadgets &amp; electronics
+              </option>
+
+              <option value="home-services">
+                Home services
+              </option>
+
+              <option value="health">
+                Health &amp; wellness
+              </option>
+
+              <option value="education">
+                Education &amp; training
+              </option>
+
+              <option value="freelance">
+                Freelance / creative
+              </option>
+
+              <option value="professional-services">
+                Professional services
+              </option>
+
+              <option value="retail">
+                General retail
+              </option>
+
+              <option value="other">
+                Other
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <small class="field-error"></small>
+
+        </div>
+
+
+
+        <!-- LOCATION -->
+
+        <div class="form-group">
+
+          <label for="location">
+            City / area
+          </label>
+
+
+          <div class="input-wrap">
+
+            <i
+              data-lucide="map-pin"
+              class="input-icon"
+            ></i>
+
+
+            <input
+              type="text"
+              id="location"
+              name="location"
+              placeholder="e.g. Offa, Kwara"
+              maxlength="100"
+              required
+            >
+
+          </div>
+
+
+          <small class="field-error"></small>
+
+        </div>
+
+
+
+        <!-- DESCRIPTION -->
+
+        <div class="form-group">
+
+          <div class="label-row">
+
+            <label for="description">
+              What does your business sell?
+            </label>
+
+            <span class="optional-label">
+              Optional
+            </span>
+
+          </div>
+
+
+          <div class="textarea-wrap">
+
+            <textarea
+              id="description"
+              name="description"
+              rows="4"
+              maxlength="300"
+              placeholder="Example: We sell quality ready-to-wear outfits, fabrics and fashion accessories."
+            ></textarea>
+
+          </div>
+
+
+          <div class="textarea-meta">
+
+            <small>
+              Help your AI understand what your business does.
+            </small>
+
+            <small id="descriptionCount">
+              0 / 300
+            </small>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- CURRENCY -->
+
+        <div class="form-group">
+
+          <label for="currency">
+            Store currency
+          </label>
+
+
+          <div class="select-wrap">
+
+            <i
+              data-lucide="banknote"
+              class="input-icon"
+            ></i>
+
+
+            <select
+              id="currency"
+              name="currency"
+            >
+
+              <option
+                value="NGN"
+                selected
+              >
+                Nigerian Naira (₦)
+              </option>
+
+              <option value="GHS">
+                Ghanaian Cedi (GH₵)
+              </option>
+
+              <option value="KES">
+                Kenyan Shilling (KSh)
+              </option>
+
+              <option value="ZAR">
+                South African Rand (R)
+              </option>
+
+              <option value="USD">
+                US Dollar ($)
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+      </section>
+
+
+
+      <!-- =====================================================
+           STEP 3
+           REVIEW
+      ====================================================== -->
+
+      <section
+        class="onboarding-step"
+        data-step="3"
+        hidden
+      >
+
+
+        <div class="step-header">
+
+          <div class="step-number">
+            03
+          </div>
+
+
+          <div>
+
+            <span class="step-eyebrow">
+              Step 3 of 3
+            </span>
+
+            <h2>
+              Everything look good?
+            </h2>
+
+            <p class="step-sub">
+              Review your details before creating your Runambiz workspace.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <div
+          class="review-card"
+          id="reviewCard"
+        >
+
+
+          <div class="review-section-title">
+
+            <i data-lucide="user-round"></i>
+
+            Your details
+
+          </div>
+
+
+          <div class="review-row">
+
+            <span>
+              Name
+            </span>
+
+            <strong id="reviewName">
+              —
+            </strong>
+
+          </div>
+
+
+          <div class="review-row">
+
+            <span>
+              Email
+            </span>
+
+            <strong id="reviewEmail">
+              —
+            </strong>
+
+          </div>
+
+
+          <div class="review-row">
+
+            <span>
+              Phone
+            </span>
+
+            <strong id="reviewPhone">
+              —
+            </strong>
+
+          </div>
+
+
+          <div class="review-row">
+
+            <span>
+              WhatsApp
+            </span>
+
+            <strong id="reviewWhatsapp">
+              Not added
+            </strong>
+
+          </div>
+
+
+
+          <div class="review-divider"></div>
+
+
+
+          <div class="review-section-title">
+
+            <i data-lucide="store"></i>
+
+            Business details
+
+          </div>
+
+
+          <div class="review-row">
+
+            <span>
+              Business
+            </span>
+
+            <strong id="reviewStore">
+              —
+            </strong>
+
+          </div>
+
+
+          <div class="review-row">
+
+            <span>
+              Category
+            </span>
+
+            <strong id="reviewType">
+              —
+            </strong>
+
+          </div>
+
+
+          <div class="review-row">
+
+            <span>
+              Location
+            </span>
+
+            <strong id="reviewLocation">
+              —
+            </strong>
+
+          </div>
+
+
+          <div class="review-row">
+
+            <span>
+              Currency
+            </span>
+
+            <strong id="reviewCurrency">
+              Nigerian Naira (₦)
+            </strong>
+
+          </div>
+
+
+          <div class="review-row review-link-row">
+
+            <span>
+              Store link
+            </span>
+
+            <strong id="reviewSlug">
+              —
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- STORE STATUS NOTICE -->
+
+        <div class="review-note">
+
+          <div class="review-note-icon">
+            <i data-lucide="eye-off"></i>
+          </div>
+
+
+          <div>
+
+            <strong>
+              Your store starts unpublished
+            </strong>
+
+            <p>
+              Nothing will be visible to customers yet.
+              Add at least one product and complete your store
+              settings before publishing.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- WHAT HAPPENS NEXT -->
+
+        <div class="next-steps-box">
+
+          <span class="next-steps-label">
+            What happens next?
+          </span>
+
+
+          <div class="next-step-item">
+
+            <span class="next-step-icon">
+              <i data-lucide="package-plus"></i>
+            </span>
+
+            <div>
+
+              <strong>
+                Add your products
+              </strong>
+
+              <span>
+                Prices, photos, stock and product details.
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="next-step-item">
+
+            <span class="next-step-icon">
+              <i data-lucide="bot"></i>
+            </span>
+
+            <div>
+
+              <strong>
+                Train your AI assistant
+              </strong>
+
+              <span>
+                Add FAQs, policies and business information.
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="next-step-item">
+
+            <span class="next-step-icon">
+              <i data-lucide="rocket"></i>
+            </span>
+
+            <div>
+
+              <strong>
+                Publish when you're ready
+              </strong>
+
+              <span>
+                Your business stays private until you publish it.
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+      </section>
+
+
+
+      <!-- =========================
+           GLOBAL ERROR
+      ========================== -->
+
+      <div
+        class="onboarding-error"
+        id="onboardingError"
+        role="alert"
+        hidden
+      >
+
+        <i data-lucide="circle-alert"></i>
+
+        <span id="onboardingErrorText"></span>
+
+      </div>
+
+
+
+      <!-- =========================
+           ACTIONS
+      ========================== -->
+
+      <div class="onboarding-actions">
+
+
+        <button
+          type="button"
+          class="btn btn-ghost"
+          id="backBtn"
+          hidden
+        >
+
+          <i data-lucide="arrow-left"></i>
+
+          <span>
+            Back
+          </span>
+
+        </button>
+
+
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="nextBtn"
+        >
+
+          <span>
+            Continue
+          </span>
+
+          <i data-lucide="arrow-right"></i>
+
+        </button>
+
+
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="finishBtn"
+          hidden
+        >
+
+
+          <span
+            class="button-content"
+            id="finishContent"
+          >
+
+            <span id="finishLabel">
+              Create my store
+            </span>
+
+            <i data-lucide="sparkles"></i>
+
+          </span>
+
+
+          <span
+            class="button-loader"
+            id="finishLoader"
+            aria-hidden="true"
+          ></span>
+
+
+        </button>
+
+
+      </div>
+
+
+
+      <!-- =========================
+           SECURITY FOOTER
+      ========================== -->
+
+      <div class="onboarding-security">
+
+        <i data-lucide="shield-check"></i>
+
+        <span>
+          Your account and business information are securely protected.
+        </span>
+
+      </div>
+
+
+    </section>
+
+
+  </main>
+
+
+
+  <!-- =========================
+       SUPABASE
+  ========================== -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+
+
+  <!-- =========================
+       LUCIDE ICONS
+  ========================== -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"
+  ></script>
+
+
+
+  <!-- =========================
+       ONBOARDING LOGIC
+  ========================== -->
+
+  <script src="onboarding.js"></script>
+
+
+
+  <!-- =========================
+       ICON INITIALIZATION
+  ========================== -->
+
+  <script>
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  </script>
+
+
+</body>
+</html>
