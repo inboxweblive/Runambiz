@@ -4,84 +4,125 @@
   const SUPABASE_URL = "https://yjcspbpynvzvtmswtgyu.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlqY3NwYnB5bnZ6dnRtc3d0Z3l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczOTU5MzQsImV4cCI6MjEwMjk3MTkzNH0.4JpkOxv6IFAwbXwUYXZqU5HVvRcEOqBFbG0-bPrCjf8";
 
-  const REDIRECT_AFTER_AUTH = "app.runambiz.com";
+  /* ---------- where things live ----------
+
+     The dashboard is a separate Vercel deployment on its own
+     subdomain. Anything that belongs to the React app needs
+     an absolute URL; anything on the marketing site stays
+     relative. */
+
+  const DASHBOARD_ORIGIN = "https://app.runambiz.com";
+  const COOKIE_DOMAIN = ".runambiz.com";
+
+  const REDIRECT_AFTER_AUTH = DASHBOARD_ORIGIN;
+  const CLAIM_PAGE = DASHBOARD_ORIGIN + "/claim.html";
   const RESET_PASSWORD_PAGE = "reset-password.html";
-  const CLAIM_PAGE = "claim.html";
+  const ONBOARDING_PAGE = "onboarding.html";
+
   const CLAIM_STORAGE_KEY = "runambiz-claim-token";
   const ACTIVE_CLASS = "active";
 
   if (!window.supabase || typeof window.supabase.createClient !== "function") {
     console.error(
       "Supabase client library not found. Add this script BEFORE auth.js:\n" +
-      '<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>'
+      '<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"><\/script>'
     );
     return;
   }
 
-  /* ---------- remember-me aware storage ----------
+  /* ---------- cross-subdomain session storage ----------
 
-     The remember choice is PERSISTED in localStorage rather
-     than held in a variable, because a variable dies the
-     moment we navigate to dashboard.html.
+     localStorage and sessionStorage are per-origin, so a
+     session written on www.runambiz.com is invisible to
+     app.runambiz.com. Cookies scoped to .runambiz.com are
+     not — they're readable from every subdomain, which is
+     exactly what the redirect needs.
 
-     The React app's src/lib/supabase.js uses an identical
-     adapter. Both read from localStorage AND sessionStorage,
-     so neither page can conclude "no session" while the
-     other thinks there is one. That mismatch was what caused
-     the auth <-> dashboard redirect loop when "Remember me"
-     was left unchecked. */
+     src/lib/supabase.js in the dashboard repo MUST use an
+     identical adapter with the same COOKIE_DOMAIN, or the
+     dashboard will read "no session" and bounce straight
+     back here.
+
+     Remember-me still works: a cookie with no max-age is a
+     session cookie and dies when the browser closes, which
+     is what sessionStorage was doing before. */
 
   const REMEMBER_KEY = "runambiz-remember";
+  const ONE_YEAR = 31536000;
+
+  function writeCookie(key, value, maxAge) {
+    var cookie =
+      key + "=" + encodeURIComponent(value) +
+      "; domain=" + COOKIE_DOMAIN +
+      "; path=/" +
+      "; secure; samesite=lax";
+
+    if (typeof maxAge === "number") {
+      cookie += "; max-age=" + maxAge;
+    }
+
+    document.cookie = cookie;
+  }
+
+  function readCookie(key) {
+    var safe = key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    var match = document.cookie.match(
+      new RegExp("(^|;\\s*)" + safe + "=([^;]*)")
+    );
+    return match ? decodeURIComponent(match[2]) : null;
+  }
 
   function shouldRemember() {
-    return localStorage.getItem(REMEMBER_KEY) !== "false";
+    return readCookie(REMEMBER_KEY) !== "false";
   }
 
   function setRemember(value) {
-    localStorage.setItem(REMEMBER_KEY, value ? "true" : "false");
+    writeCookie(REMEMBER_KEY, value ? "true" : "false", ONE_YEAR);
   }
 
   var authStorage = {
     getItem: function (key) {
-      return localStorage.getItem(key) || sessionStorage.getItem(key);
+      return readCookie(key);
     },
     setItem: function (key, value) {
-      if (shouldRemember()) {
-        localStorage.setItem(key, value);
-        sessionStorage.removeItem(key);
-      } else {
-        sessionStorage.setItem(key, value);
-        localStorage.removeItem(key);
-      }
+      writeCookie(key, value, shouldRemember() ? ONE_YEAR : undefined);
     },
     removeItem: function (key) {
-      localStorage.removeItem(key);
-      sessionStorage.removeItem(key);
+      writeCookie(key, "", 0);
     }
   };
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-    auth: { storage: authStorage, persistSession: true, autoRefreshToken: true, flowType: "implicit" }
+    auth: {
+      storage: authStorage,
+      persistSession: true,
+      autoRefreshToken: true,
+      flowType: "implicit"
+    }
   });
 
   /* ---------- outreach claim ----------
 
-     Someone arriving from claim.html carries a token in the
-     URL. Remember it across the signup round trip and send
-     them back to finish claiming instead of dropping them
-     on an empty dashboard. */
+     Someone arriving from a claim link carries a token in
+     the URL. Remember it across the signup round trip and
+     send them back to finish claiming instead of dropping
+     them on an empty dashboard.
+
+     The token lives in a cookie too — the claim page is on
+     the dashboard subdomain and can't read sessionStorage
+     written here. */
 
   const params = new URLSearchParams(window.location.search);
 
   (function rememberClaimToken() {
     var incoming = params.get("claim");
     if (incoming) {
-      sessionStorage.setItem(CLAIM_STORAGE_KEY, incoming);
+      writeCookie(CLAIM_STORAGE_KEY, incoming, 3600);
     }
   })();
 
   function claimToken() {
-    return sessionStorage.getItem(CLAIM_STORAGE_KEY) || "";
+    return readCookie(CLAIM_STORAGE_KEY) || "";
   }
 
   function destinationAfterAuth() {
@@ -94,9 +135,8 @@
   function confirmRedirect() {
     var token = claimToken();
     return token
-      ? window.location.origin + "/" + CLAIM_PAGE +
-        "?token=" + encodeURIComponent(token)
-      : window.location.origin + "/onboarding.html";
+      ? CLAIM_PAGE + "?token=" + encodeURIComponent(token)
+      : window.location.origin + "/" + ONBOARDING_PAGE;
   }
 
   /* ---------- view switching ---------- */
@@ -108,7 +148,6 @@
     });
   }
 
-
   document.addEventListener("click", function (e) {
     var trigger = e.target.closest("[data-switch]");
     if (trigger) {
@@ -116,7 +155,6 @@
       switchView(trigger.getAttribute("data-switch"));
     }
   });
-
 
   /* ---------- open the view named in the URL ----------
 
@@ -142,7 +180,6 @@
     }
 
   })();
-
 
   /* ---------- claim banner ----------
 
@@ -177,7 +214,6 @@
     shell.insertBefore(banner, shell.firstChild);
 
   })();
-
 
   /* ---------- toast ---------- */
   function injectToastStyles() {
@@ -352,7 +388,7 @@
     var msg = error.message || "";
     if (/invalid login credentials/i.test(msg)) return "Incorrect email or password.";
     if (/email not confirmed/i.test(msg)) return "Please confirm your email before signing in.";
-    if (/user already registered/i.test(msg)) return "An account with this email already exists.";
+    if (/user already registered/i.test(msg)) return "An account with this email already exists. Sign in instead.";
     if (/password should be at least/i.test(msg)) return "Password must be at least 8 characters.";
     if (/rate limit/i.test(msg)) return "Too many attempts. Please wait a moment and try again.";
     return msg || "Something went wrong. Please try again.";
@@ -484,34 +520,11 @@
 
       setLoading(button, true);
 
-      /*
-        First check whether these exact credentials
-        already belong to an existing account.
-      */
-      var loginCheck = await sb.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
-
-      if (!loginCheck.error && loginCheck.data && loginCheck.data.session) {
-
-        setLoading(button, false);
-
-        showToast(
-          "You already have an account — signing you in…",
-          "success",
-          2500
-        );
-
-        var existingDestination = destinationAfterAuth();
-
-        setTimeout(function () {
-          window.location.href = existingDestination;
-        }, 1000);
-
-        return;
-      }
-
+      /* No pre-flight login probe here. Supabase returns
+         "User already registered" on its own, and the extra
+         failed sign-in was burning the rate limit — a few
+         typo'd attempts used to lock people out with a
+         confusing error. */
 
       var res = await sb.auth.signUp({
         email: email,
@@ -545,6 +558,14 @@
           friendlyError(res.error),
           "error"
         );
+
+        /* Existing account — drop them on the login form
+           with the email already filled in. */
+        if (/user already registered/i.test(res.error.message || "")) {
+          switchView("login");
+          var loginEmailEl = document.getElementById("loginEmail");
+          if (loginEmailEl) loginEmailEl.value = email;
+        }
 
         return;
       }
