@@ -4,7 +4,7 @@
   const SUPABASE_URL = "https://yjcspbpynvzvtmswtgyu.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlqY3NwYnB5bnZ6dnRtc3d0Z3l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczOTU5MzQsImV4cCI6MjEwMjk3MTkzNH0.4JpkOxv6IFAwbXwUYXZqU5HVvRcEOqBFbG0-bPrCjf8";
 
-  const REDIRECT_AFTER_AUTH = "dashboard.html";
+  const REDIRECT_AFTER_AUTH = "app.runambiz.com";
   const RESET_PASSWORD_PAGE = "reset-password.html";
   const CLAIM_PAGE = "claim.html";
   const CLAIM_STORAGE_KEY = "runambiz-claim-token";
