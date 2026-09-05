@@ -30,40 +30,32 @@
     return;
   }
 
-  /* ---------- cross-subdomain session storage ----------
-
-     localStorage and sessionStorage are per-origin, so a
-     session written on www.runambiz.com is invisible to
-     app.runambiz.com. Cookies scoped to .runambiz.com are
-     not — they're readable from every subdomain, which is
-     exactly what the redirect needs.
-
-     src/lib/supabase.js in the dashboard repo MUST use an
-     identical adapter with the same COOKIE_DOMAIN, or the
-     dashboard will read "no session" and bounce straight
-     back here.
-
-     Remember-me still works: a cookie with no max-age is a
-     session cookie and dies when the browser closes, which
-     is what sessionStorage was doing before. */
+  
 
   const REMEMBER_KEY = "runambiz-remember";
   const ONE_YEAR = 31536000;
-
+ 
+  /* Chunk below the 4KB ceiling, leaving room for the name,
+     domain, path and flags. */
+  const CHUNK_SIZE = 3000;
+ 
+ 
   function writeCookie(key, value, maxAge) {
+ 
     var cookie =
       key + "=" + encodeURIComponent(value) +
       "; domain=" + COOKIE_DOMAIN +
       "; path=/" +
       "; secure; samesite=lax";
-
+ 
     if (typeof maxAge === "number") {
       cookie += "; max-age=" + maxAge;
     }
-
+ 
     document.cookie = cookie;
   }
-
+ 
+ 
   function readCookie(key) {
     var safe = key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     var match = document.cookie.match(
@@ -71,26 +63,83 @@
     );
     return match ? decodeURIComponent(match[2]) : null;
   }
-
+ 
+ 
+  /* Remove the plain cookie and every numbered chunk, so a
+     shrinking session never leaves stale tail chunks behind
+     that would corrupt the next read. */
+ 
+  function clearCookie(key) {
+ 
+    writeCookie(key, "", 0);
+ 
+    for (var i = 0; i < 20; i++) {
+      if (readCookie(key + "." + i) === null) break;
+      writeCookie(key + "." + i, "", 0);
+    }
+ 
+  }
+ 
+ 
   function shouldRemember() {
     return readCookie(REMEMBER_KEY) !== "false";
   }
-
+ 
+ 
   function setRemember(value) {
     writeCookie(REMEMBER_KEY, value ? "true" : "false", ONE_YEAR);
   }
-
+ 
+ 
   var authStorage = {
+ 
     getItem: function (key) {
-      return readCookie(key);
+ 
+      /* Short values are stored whole. */
+      var single = readCookie(key);
+      if (single !== null && single !== "") {
+        return single;
+      }
+ 
+      var out = "";
+ 
+      for (var i = 0; i < 20; i++) {
+        var part = readCookie(key + "." + i);
+        if (part === null) break;
+        out += part;
+      }
+ 
+      return out || null;
+ 
     },
+ 
     setItem: function (key, value) {
-      writeCookie(key, value, shouldRemember() ? ONE_YEAR : undefined);
+ 
+      var age = shouldRemember() ? ONE_YEAR : undefined;
+ 
+      clearCookie(key);
+ 
+      if (value.length <= CHUNK_SIZE) {
+        writeCookie(key, value, age);
+        return;
+      }
+ 
+      for (var i = 0; i * CHUNK_SIZE < value.length; i++) {
+        writeCookie(
+          key + "." + i,
+          value.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE),
+          age
+        );
+      }
+ 
     },
+ 
     removeItem: function (key) {
-      writeCookie(key, "", 0);
+      clearCookie(key);
     }
+ 
   };
+
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
     auth: {
