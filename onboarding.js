@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async function () {
      your dashboard is built.
   ========================================= */
 
-  var REDIRECT_AFTER_ONBOARDING = "dashboard.html";
+  var REDIRECT_AFTER_ONBOARDING = "https://app.runambiz.com/";
 
 
   /* =========================================
