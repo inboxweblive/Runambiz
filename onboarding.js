@@ -959,7 +959,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         await sb
           .from("businesses")
           .select("id")
-          .eq("owner_id", user.id)
+          .eq("owner_id", currentUser.id)
           .eq("is_outreach", false)
           .order("created_at", { ascending: true })
           .limit(1)
