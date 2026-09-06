@@ -950,17 +950,44 @@ document.addEventListener("DOMContentLoaded", async function () {
       };
 
 
-      var result =
+           /* businesses.owner_id isn't unique — a merchant can own
+         several stores, and outreach stores share an owner —
+         so upsert has nothing to conflict on. Look first,
+         then insert or update. */
+
+      var existing =
         await sb
           .from("businesses")
-          .upsert(
-            businessData,
-            {
-              onConflict: "owner_id"
-            }
-          )
-          .select()
-          .single();
+          .select("id")
+          .eq("owner_id", user.id)
+          .eq("is_outreach", false)
+          .order("created_at", { ascending: true })
+          .limit(1)
+          .maybeSingle();
+
+
+      var result;
+
+      if (existing.data) {
+
+        result =
+          await sb
+            .from("businesses")
+            .update(businessData)
+            .eq("id", existing.data.id)
+            .select()
+            .single();
+
+      } else {
+
+        result =
+          await sb
+            .from("businesses")
+            .insert(businessData)
+            .select()
+            .single();
+
+      }
 
 
       if (!result.error) {
